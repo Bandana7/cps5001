@@ -1,0 +1,45 @@
+public class Array {
+
+    // Attributes
+    private int[] array;
+    private int nextPos;
+
+    // Constructor
+    public Array() {
+        array = new int[10];
+        nextPos = 0;
+    }
+
+    // Methods
+    public void insert(int value) {
+        if (nextPos >= array.length){
+            int[] bigger_array = new int[array.length * 2];
+
+            for (int pos=0; pos < array.length; pos++) {
+                bigger_array[pos] = array[pos];
+            }
+
+            array = bigger_array;
+            System.out.println(array.length);
+        }
+
+        array[nextPos] = value;
+        nextPos++;
+    }
+
+    public static void main(String[] args) {
+        Array myArray = new Array();
+        myArray.insert(1);
+        myArray.insert(2);
+        myArray.insert(3);
+        myArray.insert(4);
+        myArray.insert(5);
+        myArray.insert(6);
+        myArray.insert(7);
+        myArray.insert(8);
+        myArray.insert(9);
+        myArray.insert(10);
+        myArray.insert(11);
+
+    }
+}
