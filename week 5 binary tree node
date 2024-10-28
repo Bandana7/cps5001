@@ -1,0 +1,19 @@
+package week5;
+
+public class BinaryTreeNode {
+    int data;
+    BinaryTreeNode left, right;
+
+    public BinaryTreeNode(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+class BinaryTree {
+    BinaryTreeNode root;
+
+    public void insert(int data)
+    }
+
+    
