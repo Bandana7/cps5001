@@ -1,0 +1,22 @@
+package week4;
+
+public class Fibonacci {
+    public static int fibonacci(int n) {
+
+        // Base case(s)
+        if (n == 0) {
+            return 0; // Fibonacci(0) = 0
+        }
+        if (n == 1) {
+            return 1; // Fibonacci(1) = 1
+        }
+
+        // Recursive
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+
+    public static void main(String[] args) {
+        int num = 10;
+        System.out.println("Fibonacci of " + num + " is: " + fibonacci(num));
+    }
+}
