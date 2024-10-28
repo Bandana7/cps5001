@@ -1,0 +1,101 @@
+package week3;
+
+import java.util.Scanner;
+
+public class MyStack {
+    private int[] array;
+    private int size; // Current size of the stack
+    private int capacity; // Maximum capacity of the stack
+
+    public MyStack(int capacity) {
+        this.capacity = capacity;
+        array = new int[capacity];
+        size = 0;
+    }
+
+    public void push(int element) {
+        if (size < capacity) {
+            array[size++] = element; // Add element and increment size
+        } else {
+            throw new IllegalStateException("Stack is full");
+        }
+    }
+
+    public int pop() {
+        if (size > 0) {
+            int element = array[--size]; // Decrement size and get element
+            array[size] = 0; // Clear the value (optional)
+            return element;
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    public int peek() {
+        if (size > 0) {
+            return array[size - 1]; // Return the top element
+        } else {
+            throw new IllegalStateException("Stack is empty");
+        }
+    }
+
+    public boolean isEmpty() {
+        return size == 0; // Check if the stack is empty
+    }
+
+    public int getSize() {
+        return size; // Get the current size of the stack
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the size of the stack: ");
+        int stackSize = scanner.nextInt();
+
+        MyStack stack = new MyStack(stackSize);
+
+        while (true) {
+            System.out.println("\nChoose an operation:");
+            System.out.println("1. Push");
+            System.out.println("2. Pop");
+            System.out.println("3. Peek");
+            System.out.println("4. Exit");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter an element to push: ");
+                    int element = scanner.nextInt();
+                    try {
+                        stack.push(element);
+                        System.out.println("Pushed: " + element);
+                    } catch (IllegalStateException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 2:
+                    try {
+                        int poppedElement = stack.pop();
+                        System.out.println("Popped: " + poppedElement);
+                    } catch (IllegalStateException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 3:
+                    try {
+                        int topElement = stack.peek();
+                        System.out.println("Top element: " + topElement);
+                    } catch (IllegalStateException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
