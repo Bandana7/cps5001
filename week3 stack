@@ -1,0 +1,52 @@
+package week3;
+
+public class Stack  {
+    // Attributes
+    private int[] stack;
+    private int size;
+    private int capacity;
+
+    public Stack(int capacity){
+        this.capacity = capacity;
+        stack = new int[capacity];
+        size = 0;
+    }
+    public void push(int element){
+        if (size == capacity) {
+            System.out.println("Stack is full");
+        }
+
+        stack[size]= element;
+        size++;
+    }
+    public int pop(){
+        if (size > 0) {
+            int element = stack[size - 1];
+            stack[size-1] = 0;
+            size--;
+            return element;
+        }
+        else{
+            System.out.println("Stack is empty");
+            return  -1;
+        }
+    }
+    public int peek(){
+        if (size > 0) {
+            return stack[size - 1];
+        }
+        else{
+            System.out.println("Stack is empty");
+            return -1;
+        }
+    }
+    public static void main (String[] args){
+        Stack myStack = new Stack(10);
+        myStack.push(1);
+        myStack.push(7);
+        myStack.push(11);
+
+
+
+    }
+}
