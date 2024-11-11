@@ -1,0 +1,306 @@
+class Location:
+    """
+    Represents a point in 2D space.
+
+    Attributes:
+        __x (int): The x-coordinate of the location.
+        __y (int): The y-coordinate of the location.
+    """
+
+    def __init__(self, x: int, y: int) -> None:
+        """
+        Initialises a Location object with given x and y coordinates.
+
+        Args:
+            x (int): The x-coordinate of the location.
+            y (int): The y-coordinate of the location.
+        """
+        self.__x = x
+        self.__y = y
+
+    def get_x(self) -> int:
+        """
+        Gets the x-coordinate of the location.
+
+        Returns:
+            int: The x-coordinate.
+        """
+        return self.__x
+
+    def get_y(self) -> int:
+        """
+        Gets the y-coordinate of the location.
+
+        Returns:
+            int: The y-coordinate.
+        """
+        return self.__y
+
+    def set_x(self, new_x: int) -> None:
+        """
+        Sets the x-coordinate of the location.
+
+        Args:
+            new_x (int): The new x-coordinate.
+        """
+        self.__x = new_x
+
+    def set_y(self, new_y: int) -> None:
+        """
+        Sets the y-coordinate of the location.
+
+        Args:
+            new_y (int): The new y-coordinate.
+        """
+        self.__y = new_y
+
+    def equals(self, other_location: 'Location') -> bool:
+        """
+        Checks if two locations are equal.
+
+        Args:
+            other_location (Location): The other location to compare.
+
+        Returns:
+            bool: True if the locations are equal, False otherwise.
+        """
+        return self.__x == other_location.get_x() and self.__y == other_location.get_y()
+
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the location.
+
+        Returns:
+            str: A string representation of the location.
+        """
+        return f"({self.__x}, {self.__y})"
+        
+        
+        
+        
+    
+   
+   
+   from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from location import Location
+    from environment import Environment
+
+
+class Agent(ABC):
+    def __init__(self, location: Location) -> None:
+        """
+        Constructor for the Agent class.
+
+        Parameters:
+        - location: A Location object representing the agent's initial location.
+        """
+        self.__location = location
+
+    def set_location(self, location: Location) -> None:
+        """
+        Set the location of the agent.
+
+        Parameters:
+        - location: A Location object representing the new location of the agent.
+        """
+        self.__location = location
+
+    def get_location(self) -> Location:
+        """
+        Get the current location of the agent.
+
+        Returns:
+        A Location object representing the agent's current location.
+        """
+        return self.__location
+
+    @abstractmethod
+    def act(self, environment: Environment):
+        """
+        The agent performs some actions.
+        """
+        pass
+
+
+
+
+
+
+
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:
+    from model.agent import Agent
+    from model.location import Location
+
+
+class Environment(ABC):
+    """
+    Abstract base class representing an environment.
+    """
+
+    def __init__(self, width: int, height: int) -> None:
+        """
+        Initialises an Environment object with the given width and height.
+
+        Args:
+            width (int): The width of the environment grid.
+            height (int): The height of the environment grid.
+        """
+        self.__width = width
+        self.__height = height
+
+    @abstractmethod
+    def clear(self) -> None:
+        """
+        Clears the environment by removing all agents.
+        """
+        pass
+
+    @abstractmethod
+    def get_agent(self, location: Location) -> Optional[Agent, None]:
+        """
+        Returns the agent at location in the environment grid.
+
+        Args:
+            location (Location): The location of the agent.
+
+        Returns:
+            Agent: The agent at the location or None.
+        """
+        pass
+
+    @abstractmethod
+    def set_agent(self, agent: Agent, location: Location) -> None:
+        """
+        Sets the agent at position (x, y) in the environment grid.
+
+        Args:
+            agent (Agent): The agent to set.
+            location (Location): The location to set the agent.
+        """
+        pass
+
+    def get_width(self) -> int:
+        """
+        Returns the width of the environment grid.
+
+        Returns:
+            int: The width of the environment grid.
+        """
+        return self.__width
+
+    def get_height(self) -> int:
+        """
+        Returns the height of the environment grid.
+
+        Returns:
+            int: The height of the environment grid.
+        """
+        return self.__height
+        
+        
+        
+        
+    
+    
+    from typing import List, Optional
+from model.agent import Agent
+from model.environment import Environment
+from model.location import Location
+
+
+class Ocean(Environment):
+    """
+    Represents an ocean environment.
+    """
+
+    def __init__(self, width: int, height: int) -> None:
+        """
+        Initialises an Ocean object with the given width and height.
+
+        Args:
+            width (int): The width of the ocean grid.
+            height (int): The height of the ocean grid.
+        """
+        super().__init__(width, height)
+        self.__grid = [[None for _ in range(width)] for _ in range(height)]
+
+    def clear(self) -> None:
+        """Clears the ocean by removing all agents."""
+        self.__grid = [[None for _ in range(self.get_width())] for _ in range(self.get_height())]
+
+    def get_agent(self, location: Location) -> Optional[Agent, None]:
+        """
+        Returns the agent at location in the ocean.
+
+        Args:
+            location (Location): The location of the agent.
+
+        Returns:
+            Agent: The agent at location in the ocean.
+        """
+        return self.__grid[location.get_y()][location.get_x()]
+
+    def set_agent(self, agent: Agent, location: Location) -> None:
+        """
+        Sets the agent at position in the ocean.
+
+        Args:
+            agent (Agent): The agent to set.
+            location (Location): The location to set the agent.
+        """
+        self.__grid[location.get_y()][location.get_x()] = agent
+
+    def find_free_locations(self, location: Location) -> List[Location]:
+        x = location.get_x()
+        y = location.get_y()
+
+        free_locations = []
+
+        for offset_y in range(-1, 2):
+            for offset_x in range(-1, 2):
+                loc_x = x + offset_x
+                loc_y = y + offset_y
+
+                if loc_x < 0:
+                    loc_x = self.get_width() - 1
+
+                if loc_y < 0:
+                    loc_y = self.get_height() - 1
+
+                if loc_x >= self.get_width():
+                    loc_x = 0
+
+                if loc_y >= self.get_height():
+                    loc_y = 0
+
+                if self.__grid[loc_y][loc_x] is None:
+                    free_locations.append(Location(loc_x, loc_y))
+
+        return free_locations
+
+
+
+
+
+
+from model.agent import Agent
+
+
+class Shark(Agent):
+
+    def act(self):
+        pass
+
+
+
+
